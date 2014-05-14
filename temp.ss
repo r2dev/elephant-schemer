@@ -125,11 +125,6 @@
 ;;;;;new;;;old;;;lat;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define multiinsertL
-  (lambda (new old lat)
-    (cond
-     [[[[[[[[[[[[[[[[[[[/////////zzzzzzzzzzzzzzzzzzzzz
-                        need some sleep
 
 
 
