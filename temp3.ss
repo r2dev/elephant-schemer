@@ -353,11 +353,72 @@
        [(eq? (car lat) old) (cons new (cons old (cdr lat)))]
        [else (cons (car lat) ((insertR-f new) old (cdr lat)))]))))
 
+(define seql
+  (lambda (new old l)
+    (cons new (cons old l))))
+
+(define seqr
+  (lambda (new old l)
+    (cons old (cons new l))))
 
 (define insert-g
-  (lambda (pos)
-    (lambda (new)
-      (lambda (old lat)
-        ((pos (
-         
+  (lambda (seq)
+    (lambda (new old l)
+      (cond
+       [(null? l) (quote ())]
+       [(eq? (car l) old) (seq new old (cdr l))]
+       [else (cons (car l) ((insert-g seq) new old l))]))))
+
+(define insertL (insert-g seql))
+(define insertR (insert-g seqr))
+
+(define insertL
+  (insert-g
+   (lambda (new old l)
+     (cons new (cons old l)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;subst;;;;;;;;;;;
+;;;;;;;;new;;;;;old;;;lat;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define subst
+  (insert-g
+   (lambda (new old lat)
+     (cons new (cdr lat)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;multirember;;;;;;;;;;;;;
+;;;;;;;;;;a;;;;lat;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define multirember
+  (lambda (a lat)
+    (cond
+     [(null? lat) (quote ())]
+     [(eq? (car lat) a) (multirember (cdr lat))]
+     [else (cons (car lat) (multirember (cdr lat)))])))
+
+(define multirember-f
+  (lambda (test?)
+    (lambda (a lat)
+      (cond
+       [(null? lat) (quote ())]
+       [(test? (car lat) a) ((multirember test?) a (cdr lat))]
+       [else (cons (car lat)) ((multirember test?) a (cdr lat))]))))
+
+(define multirember-eq? (multirember-f eq?))
+
+(define multiremberT
+  (lambda (test?)
+    (lambda (lat)
+      (cond
+       [(null? lat) (quote ())]
+       [(test? (car lat)) (multiremberT test? (cdr lat))]
+       [else (cons (car lat) (multiremberT test? (cdr lat)))]))))
+
+
+
+
+
 
